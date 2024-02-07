@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/team2/css/index.css}">
+    <link rel="stylesheet" href="/index/css/head.css" />
+</head>
+
+<body>
+    <div th:if="${session.user} == null">
+        <a href="/team2/tmpl/user-info/login">로그인</a>
+        <a href="/team2/tmpl/user-info/join">회원가입</a>
+    </div>
+    <div class="itd" th:if="${session.user} != null">
+	<div class="button" id="button" style="position: absolute; left: 250px;"></div>
+        <span th:id="username" th:text="${session.user.uiName}"></span>님 안녕하세요.<br>
+    </div>
+    </div>
+    <div id="container">
+        <div id="t-container">
+            <h1 id="game-title"><img th:src="@{/team2/img/gameController.png}" width="40px" height="40px">GAME</h1>
+            <div id="game-list">
+            </div>
+        </div>
+    </div>
+    <div id="score-container">
+        <h1><img th:src="@{/team2/img/trophy.png}" width="40px" height="40px">RANK</h1><br>
+        <div id="btn_group">
+            <button id="Keybord" onclick="showTable(8)">줄다리기</button>
+            <button id="blackjack" onclick="showTable(9)">블랙잭</button>
+        </div>
+        <table border="1" class="rwd-table" width="250" height="450">
+            <tr>
+                <th>랭킹</th>
+                <th>이름</th>
+                <th>점수</th>
+            </tr>
+            <tbody id="Rank">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function gsmRank(ranks) {
+            let html = '';
+            for (let i = 0; i < ranks.length; i++) {
+                const rank = ranks[i];
+                let bgcolor = '';
+
+                if (i === 0) {
+                    bgcolor = 'gold';
+                } else if (i === 1) {
+                    bgcolor = 'silver';
+                } else if (i === 2) {
+                    bgcolor = 'bronze';
+                } else {
+                    bgcolor = 'orange';
+                }
+
+                html += `<tr bgcolor="${bgcolor}">`;
+                html += `<td>${i + 1}</td>`;
+                html += `<td>${rank.uiName}</td>`;
+                html += `<td>${rank.piPoint}</td>`;
+                html += '</tr>';
+            }
+            document.querySelector('#Rank').innerHTML = html;
+        }
+
+        window.addEventListener('load', async function () {
+            const res = await fetch('/team2/game-infos');
+            const games = await res.json();
+            let html = '';
+
+            for (const game of games) {
+                let imgSrc = '';
+                let href = '';
+
+                if (game.giName === '키보드 줄다리기') {
+                    imgSrc = '/team2/img/Keybord tug of war.png';
+                    href = 'game';
+
+                } else {
+                    imgSrc = '/team2/img/joker1.png';
+                    href = 'game2';
+
+                }
+
+                html += `<a href='/team2/tmpl/${href}'><img src="${imgSrc}" ></a>`;
+
+            }
+            document.querySelector('#game-list').innerHTML = html;
+        });
+
+        window.addEventListener('load', async function () {
+            const res = await fetch('/team2/point-infos/rank?giNum=8');
+            const ranks = await res.json();
+            gsmRank(ranks);
+        });
+
+
+        function showTable(giNum) {
+            if (giNum === 8) {
+                document.getElementById('Keybord').disabled = true;
+                document.getElementById('blackjack').disabled = false;
+                fetch('/team2/point-infos/rank?giNum=8')
+                    .then(res => res.json())
+                    .then(ranks => {
+                        gsmRank(ranks);
+                    });
+            } else if (giNum === 9) {
+                document.getElementById('blackjack').disabled = true;
+                document.getElementById('Keybord').disabled = false;
+                fetch('/team2/point-infos/rank?giNum=9')
+                    .then(res => res.json())
+                    .then(ranks => {
+                        gsmRank(ranks);
+                    });
+            }
+        }
+
+    </script>
+    <script>
+        // 랜덤 RGB 색상 생성 함수
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // 랜덤 색상을 텍스트에 적용
+        const usernameElement = document.getElementById('username');
+        usernameElement.style.color = getRandomColor();
+    </script>
+    <script th:src="@{/index/js/head.js}"></script>
+</body>
+
+</html>

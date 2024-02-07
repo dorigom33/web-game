@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>사용자 정보 수정</title>
+    <script src="/team1/js/common.js"></script>
+  </head>
+  <body>
+    <h3>사용자 정보 수정</h3>
+    <form id="updateForm">
+      <input type="hidden" id="uiNum" name="uiNum" />
+      <label for="uiName">이름:</label>
+      <input type="text" id="uiName" name="uiName" required/><br/>
+
+      <label for="uiId">아이디:</label>
+      <input type="text" id="uiId" name="uiId" required/><br/>
+
+      <label for="uiPwd">비밀번호:</label>
+      <input type="password" id="uiPwd" name="uiPwd" required/><br/>
+
+      <label for="uiMobile">휴대폰:</label>
+      <input type="text" id="uiMobile" name="uiMobile"><br/>
+
+      <label for="uiEmail">이메일:</label>
+      <input type="email" id="uiEmail" name="uiEmail"><br/>
+
+      <label for="uiBirth">생년월일:</label>
+      <input type="text" id="uiBirth" name="uiBirth"><br/>
+
+      <button type="button" onclick="update()">수정</button>
+    </form>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const uiNum = urlParams.get('uiNum');
+
+      async function update(){
+        const res = await fetch(`/team1/user-infos/${uiNum}`, {
+          method: 'PATCH',
+          body: getJsonFromData(),
+          headers: {
+            'Content-Type' : 'application/json;charset=UTF-8',
+          }
+        });
+        const data = await res.json();
+        alert(data.msg);
+        if(data.url){
+          location.href = data.url;
+        }
+      }
+
+      window.addEventListener('load', async function () {
+        const res = await fetch(`/team1/user-infos/${uiNum}`);
+        const user = await res.json();
+        for(const key in user){
+          if(document.querySelector('#' + key)){
+            document.querySelector('#' + key).value = user[key];
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

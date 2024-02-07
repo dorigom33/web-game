@@ -1,0 +1,39 @@
+body {
+    text-align: center;
+    align-items: center;
+    /*드래그방지*/
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.container {
+    display: block;
+    width: 1080px;
+    height: 50vh;
+    margin: auto;
+    background-color: white;
+}
+
+canvas {
+    background: #eee;
+    display: block;
+    margin: 0 auto;
+    margin-top: auto;
+    margin-bottom: auto;
+
+}
+
+
+.header {
+    width: 1080px;
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 25px;
+    background-color: #333;
+    color: white;
+
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team1 Game</title>
+    <link rel="stylesheet" href="/team1/css/main.css" />
+    <link rel="stylesheet" href="/index/css/head.css" />
+
+  </head>
+  <body>
+    <div id="game-all-container">
+    <div class="button" id="button"></div>
+      <div id="score-all-container">
+        <div id="score-container">
+          <div id="score-title">SCORE</div>
+          <div id="score">0</div>
+        </div>
+        <div id="best-score-container">
+          <div id="best-score-title">BEST SCORE</div>
+          <div id="best-score"></div>
+        </div>
+      </div>
+      <div id="game-board">
+        <div id="game-overlay-container">
+          <button id="startButton">시작버튼</button>
+        </div>
+        <div id="gameover-container">
+          <div id="myScore">SCORE : 0</div>
+          <button id="saveButton" onclick="savePoint()">저장하고 리더보드 가기</button>
+        </div>
+      </div>
+    </div>
+    <div class="selection-box"></div>
+    <div id="timer-container">
+      <div id="timer-bar"></div>
+    </div>
+    <span id="timer">Time: 120 sec</span>
+    <script src="/team1/js/script.js"></script>
+  </body>
+  <script>
+    // 점수 저장
+    async function savePoint() {
+      const uiNum = '[[${session.user.uiNum}]]';
+      const giNum = '[[${param.giNum}]]';
+      const point = document.querySelector('#score').innerText;
+      const data = {
+        uiNum: uiNum,
+        giNum: giNum,
+        piPoint: point,
+      };
+      const res = await fetch('/team1/point-infos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        body: JSON.stringify(data),
+      });
+      const msg = await res.json();
+      alert(msg.msg);
+      location.href='/team1/tmpl/game/leaderboard/board.html';
+    }
+    window.addEventListener('load', async function () {
+      const res = await fetch('/team1/point-infos/max?giNum=11');
+      const point = await res.json();
+      document.querySelector(
+        '#best-score'
+      ).innerHTML = `<span>${point.piPoint}</span>`;
+    });
+  </script>
+  <script th:src="@{/index/js/head.js}"></script>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Team1 Game</title>
+    <link rel="stylesheet" href="/team1/css/style.css" />
+    <link rel="stylesheet" href="/index/css/head.css" />
+  </head>
+  <body>
+    <div class="container">
+    <div class="button" id="button"></div>
+      <h1 id="title">2048</h1>
+      <div id="score-container">
+        <div id="score-title">SCORE</div>
+        <div id="score">0</div>
+      </div>
+      <div id="best-score-container">
+        <div id="best-score-title">BEST SCORE</div>
+        <div id="best-score"></div>
+      </div>
+      <p id="instructions">
+        PC에서는 방향키, 모바일에서는 터치로 <span> 2048</span>을
+        플레이하세요<span>✨</span>
+      </p>
+      <div th:id="'game-container-'+${param.size}"></div>
+    </div>
+    <script>
+      const GRID_SIZE = '[[${param.size}]]';
+    </script>
+    <script src="/team1/js/oneScript.js"></script>
+    <!-- <div th:text="${session.user}"></div> -->
+    <script>
+      async function savePoint() {
+        const uiNum = '[[${session.user.uiNum}]]';
+        const giNum = '[[${param.giNum}]]';
+        const tiNum = '[[${param.size}]]';
+
+        const point = document.querySelector('#score').innerText;
+        const data = {
+          uiNum: uiNum,
+          giNum: giNum,
+          piPoint: point,
+          tiNum: tiNum,
+        };
+        console.log(data);
+        const res = await fetch('/team1/point-infos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+          },
+          body: JSON.stringify(data),
+        });
+        const msg = await res.json();
+        alert(msg.msg);
+      }
+      window.addEventListener('load', async function () {
+        const res = await fetch('/team1/point-infos/max?giNum=10');
+        const point = await res.json();
+        document.querySelector(
+          '#best-score'
+        ).innerHTML = `<b>${point.piPoint}</b>`;
+      });
+    </script>
+    <script th:src="@{/index/js/head.js}"></script>
+  </body>
+</html>

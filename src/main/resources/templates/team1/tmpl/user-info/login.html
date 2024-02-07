@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team1 Game</title>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'poppins', sans-serif;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        /* background-image: url(https://user-images.githubusercontent.com/13468728/233847739-219cb494-c265-4554-820a-bd3424c59065.jpg); */
+        background: url(https://user-images.githubusercontent.com/101033246/270906584-ddfa728e-b0fd-42a4-ad62-49bf8498c687.gif);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+      }
+
+      section {
+        position: relative;
+        max-width: 400px;
+        background-color: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        backdrop-filter: blur(55px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 3rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+        color: #fff;
+        text-align: center;
+      }
+
+      .inputbox {
+        position: relative;
+        margin: 30px 0;
+        max-width: 310px;
+        border-bottom: 2px solid #fff;
+      }
+
+      .inputbox label {
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        transform: translateY(-50%);
+        color: #fff;
+        font-size: 1rem;
+        pointer-events: none;
+        transition: all 0.5s ease-in-out;
+      }
+
+      input:focus ~ label,
+      input:valid ~ label {
+        top: -5px;
+      }
+
+      .inputbox input {
+        width: 100%;
+        height: 60px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        padding: 0 35px 0 5px;
+        color: #fff;
+      }
+
+      .inputbox ion-icon {
+        position: absolute;
+        right: 8px;
+        color: #fff;
+        font-size: 1.2rem;
+        top: 20px;
+      }
+
+      button {
+        width: 100%;
+        height: 40px;
+        border-radius: 40px;
+        background-color: rgb(255, 255, 255, 1);
+        border: none;
+        outline: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.4s ease;
+      }
+
+      button:hover {
+        background-color: rgb(255, 255, 255, 0.5);
+      }
+
+      .register {
+        font-size: 0.9rem;
+        color: #fff;
+        text-align: center;
+        margin: 25px 0 10px;
+      }
+
+      .register p a {
+        text-decoration: none;
+        color: yellow;
+        font-weight: bold;
+      }
+
+      .register p a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <form method="post" action="/team1/login">
+        <h1>Login</h1>
+        <div class="inputbox">
+          <ion-icon name="mail-outline"></ion-icon>
+          <input
+            type="text"
+            name="uiId"
+            id="uiId"
+            required
+            autocomplete="off"
+          />
+          <label for="uiId">ID</label>
+        </div>
+        <div class="inputbox">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <input
+            type="password"
+            name="uiPwd"
+            id="uiPwd"
+            required
+            autocomplete="off"
+          />
+          <label for="uiPwd">PW</label>
+        </div>
+        <div class="error-div" th:text="${msg}"></div>
+
+        <button type="button" onclick="login()">로그인</button>
+        <div class="register">
+          <p>
+            계정이 없으신가요?
+            <a href="/team1/tmpl/user-info/join">회원가입</a>
+          </p>
+        </div>
+      </form>
+    </section>
+    <script>
+      async function login() {
+        const json = JSON.stringify({
+          uiId: document.querySelector('#uiId').value,
+          uiPwd: document.querySelector('#uiPwd').value,
+        });
+
+        const res = await fetch('/team1/login', {
+          method: 'POST',
+          body: json,
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+          },
+        });
+        const msg = await res.json();
+        alert(msg.msg);
+        if (msg.url) {
+          location.href = msg.url;
+        }
+      }
+    </script>
+  </body>
+</html>

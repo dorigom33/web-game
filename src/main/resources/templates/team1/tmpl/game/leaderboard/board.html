@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Team1 Game</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: url(https://user-images.githubusercontent.com/101033246/270906584-ddfa728e-b0fd-42a4-ad62-49bf8498c687.gif);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        color: rgb(255, 252, 252); /* 글자 색상 */
+        min-height: 100vh;
+      }
+
+      #title {
+        margin-top: 20px;
+        text-align: center;
+        padding: 20px 0;
+      }
+
+      p {
+        margin: 20px 0px;
+      }
+
+      table {
+        text-align: center;
+        color: rgb(255, 255, 255); /* 표 글자 색상 */
+        border-radius: 10px;
+      }
+
+      /* 테이블 배경 블러 처리 */
+      .table-blur {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.061);
+      }
+
+      .nav-tabs .nav-link {
+        color: #333 !important;
+      }
+
+      .main-button {
+        margin-left:10px;
+        display: flex;
+        float: right;
+        border-style: none;
+        background-color: #fff;
+        border-radius: 0.3rem;
+        color: #33004c;
+        cursor: pointer;
+      }
+
+      .main-button:hover {
+        display: flex;
+        float: right;
+        border-style: none;
+        background-color: #33004c;
+        border-radius: 0.3rem;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .nav-tabs .nav-item.show .nav-link,
+      .nav-tabs .nav-link.active {
+        background-color: #fff; /* 활성 탭 배경 색상 */
+        border-radius: 10px;
+        color: #333 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="title">
+      <h2>게임 리더보드</h2>
+    </div>
+    <div class="container">
+      <!-- <a href="/team1/">메인으로</a> -->
+      <!-- <button onclick="location.href='/team1/'">메인으로</button> -->
+      <div class="row">
+        <div class="col">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                data-toggle="tab"
+                href="#leaderboard2048"
+                >2048</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#leaderboardFrog"
+                >개구리</a
+              >
+            </li>
+          </ul>
+
+          <div class="tab-content" id="gameTabsContent">
+            <div class="tab-pane fade show active" id="leaderboard2048">
+              <table
+                class="table borderless table-hover table-blur"
+                id="leaderboard2048"
+              >
+                <thead>
+                  <tr>
+                    <th>순위</th>
+                    <th>
+                      <select name="tile" id="tileSizeSelect">
+                        <option selected="selected" value="">
+                          게임판 선택
+                        </option>
+                        <option value="3">3 x 3</option>
+                        <option value="4">4 x 4</option>
+                        <option value="5">5 x 5</option>
+                        <option value="6">6 x 6</option>
+                        <option value="7">7 x 7</option>
+                        <option value="8">8 x 8</option>
+                      </select>
+                    </th>
+                    <th>이름</th>
+                    <th>점수</th>
+                    <th>게임 플레이 날짜</th>
+                  </tr>
+                </thead>
+                <tbody id="tBody2048"></tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade" id="leaderboardFrog">
+              <table class="table table-blur table-hover" id="leaderboardFrog">
+                <thead>
+                  <tr>
+                    <th>순위</th>
+                    <th>이름</th>
+                    <th>점수</th>
+                    <th>게임 플레이 날짜</th>
+                  </tr>
+                </thead>
+                <tbody id="tBodyFrog"></tbody>
+              </table>
+            </div>
+            <button class="main-button" onclick="location.href='/team1/'">메인으로</button>
+            <button class="main-button" onclick="location.href='/'">홈으로</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script>
+      const tileSizeSelect = document.querySelector('#tileSizeSelect');
+      let tiNum;
+
+      tileSizeSelect.addEventListener('change', function () {
+        const selectedValue = tileSizeSelect.value;
+        switch (selectedValue) {
+          case '3':
+            tiNum = 3;
+            break;
+          case '4':
+            tiNum = 4;
+            break;
+          case '5':
+            tiNum = 5;
+            break;
+          case '6':
+            tiNum = 6;
+            break;
+          case '7':
+            tiNum = 7;
+            break;
+          case '8':
+            tiNum = 8;
+            break;
+          default:
+            tiNum = null;
+        }
+        if (tiNum !== null) {
+          showLeaderboard('2048', tiNum);
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        showLeaderboard('2048');
+        showLeaderboard('frog');
+      });
+
+      async function showLeaderboard(game) {
+        let giNum;
+        if (game === '2048') {
+          giNum = 10;
+        } else if (game === 'frog') {
+          giNum = 11;
+        }
+
+        const res = await fetch(`/team1/point-infos/rank?giNum=${giNum}`);
+        const boardData = await res.json();
+        console.log('게임 데이터:', boardData);
+
+        let html = '';
+        let rank = 1;
+        for (const board of boardData) {
+          if (game === 'frog' && rank <= 10) {
+            html += '<tr>';
+            if (rank <= 3) {
+              html += `<td style='color: red; font-weight: bold;'>${rank++}</td>`;
+            } else {
+              html += `<td>${rank++}</td>`;
+            }
+            html += `<td>${board.uiName}</td>`;
+            html += `<td>${board.piPoint}</td>`;
+            html += `<td>${board.credat}</td>`;
+            html += '</tr>';
+          } else if (
+            game === '2048' &&
+            tiNum == `${board.tiNum}` &&
+            rank <= 10
+          ) {
+            html += '<tr>';
+            if (rank <= 3) {
+              html += `<td style='color: red; font-weight: bold;'>${rank++}</td>`;
+            } else {
+              html += `<td>${rank++}</td>`;
+            }
+            html += `<td>${board.tiNum} x ${board.tiNum}</td>`;
+            html += `<td>${board.uiName}</td>`;
+            html += `<td>${board.piPoint}</td>`;
+            html += `<td>${board.credat}</td>`;
+            html += '</tr>';
+          }
+        }
+
+        if (game === '2048') {
+          document.querySelector('#leaderboard2048 tbody').innerHTML = html;
+        } else if (game === 'frog') {
+          document.querySelector('#leaderboardFrog tbody').innerHTML = html;
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.game.mapper.PointInfoMapper">
+	<insert id="insertPointInfo" parameterType="com.game.vo.PointInfoVO">
+		INSERT INTO POINT_INFO(UI_NUM, GI_NUM, PI_POINT, TI_NUM)
+		VALUES(#{uiNum}, #{giNum}, #{piPoint}, #{tiNum})
+	</insert>
+	<select id="selectMaxPoint" resultType="com.game.vo.PointInfoVO">
+		SELECT GI_NUM, MAX(PI_POINT) PI_POINT FROM POINT_INFO
+		WHERE UI_NUM=#{uiNum}
+		AND GI_NUM=#{giNum}
+	</select>
+
+	<select id="selectPointRank" resultType="com.game.vo.PointInfoVO">
+		SELECT PI.*, GI.GI_NAME, UI.UI_NAME
+		FROM POINT_INFO PI
+		LEFT JOIN GAME_INFO GI ON PI.GI_NUM = GI.GI_NUM
+		LEFT JOIN USER_INFO UI ON PI.UI_NUM = UI.UI_NUM
+		LEFT JOIN TYPE_INFO TI ON PI.TI_NUM = TI.TI_NUM
+		WHERE PI.GI_NUM=#{giNum}
+		ORDER BY PI.PI_POINT DESC
+		<!--ORDER BY PI.PI_POINT DESC LIMIT 10-->;
+	</select>
+
+</mapper>

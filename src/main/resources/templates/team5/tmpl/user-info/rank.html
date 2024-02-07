@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- @{}은 컨텍스트 루트 -->
+    <link rel="stylesheet" th:href="@{/team5/css/table.css}" />
+    <link rel="stylesheet" href="/index/css/head.css" />
+</head>
+<body>
+	<div class="button" id="button" style="position: absolute; left: 600px;"></div>
+    <table class="rwd-table">
+       <tr>
+            <td>순위</td>
+            <td>게임명</td>
+            <td>유저이름</td>
+            <td>점수</td>
+       </tr>
+       <tbody id="ranking">
+       </tbody>
+    </table>
+    <script>
+        window.addEventListener('load',async function(){
+            const res = await fetch('/team5/point-infos/rank?giNum=4');
+            const ranks  = await res.json();
+            let html = ''
+            let i=1;
+            for(const rank of ranks){
+                html += `<tr>`;
+                html += `<td>${i}위</td>`;
+                html += `<td>${rank.giName}</td>`;
+                html += `<td>${rank.uiName}</td>`;
+                html += `<td>${rank.piPoint}</td>`;
+                html += `</tr>`;
+                i++;
+            }
+            document.querySelector('#ranking').innerHTML = html;
+        })
+    </script>
+    <script th:src="@{/index/js/head.js}"></script>
+</body>
+</html>

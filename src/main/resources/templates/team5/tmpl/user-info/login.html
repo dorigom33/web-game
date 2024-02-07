@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div.error-div {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+    <!-- @{}은 컨텍스트 루트 -->
+    <link rel="stylesheet" th:href="@{/team5/css/login.css}" />
+</head>
+
+<body>
+    <input type="hidden" id="userInfoSession" th:value="${session.user}">
+    <div class="container" id="container">
+        <form method="post" action="/login">
+            <h1>Team 5 Login</h1>
+            <br>
+            <input type="text" name="uiId" id="uiId" placeholder="아이디"><br>
+            <input type="password" name="uiPwd" id="uiPwd" placeholder="비밀번호"><br>
+            <div class="error-div" th:text="${msg}"></div>
+            <a href="/team5/tmpl/user-info/join">회원이 아니신가요 ? 회원가입을 해주세요!</a>
+            <button type="button" onclick="login()">로그인</button>
+        </form>
+    </div>
+    <script>
+        window.addEventListener('load', function() {
+            // console.log(!document.querySelector('#userInfoSession').value);
+            if(document.querySelector('#userInfoSession').value) {
+                location.href = '/';
+            }
+        })
+
+        async function login() {
+            const json = JSON.stringify({
+                uiId: document.querySelector('#uiId').value,
+                uiPwd: document.querySelector('#uiPwd').value,
+            });
+
+            const res = await fetch('/team5/login', {
+                method: 'POST',
+                body: json,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                }
+            })
+            const msg = await res.json();
+            alert(msg.msg);
+            if (msg.url) {
+                location.href = msg.url;
+            }
+        }
+    </script>
+</body>
+
+</html>

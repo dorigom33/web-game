@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- @{}은 컨텍스트 루트 -->
+    <link rel="stylesheet" th:href="@{/team5/css/login.css}" />
+</head>
+<!--여기서 아이디랑 이메일은 유니크여서 뺏어요!-->
+
+<body>
+    <div class="container" id="container">
+        <form>
+            <b>이름</b> <input type="text" id="uiName" placeholder="이름"> <br>
+            <b>비밀번호</b> <input type="password" id="uiPwd" placeholder="특수기호 !@#$ 중 1개이상"> <br>
+            <b>휴대번호</b> <input type="text" id="uiMobile" placeholder="' - ' 없이 입력"> <br>
+            <b>생일</b> <input type="text" id="uiBirth" placeholder="ex)19970420"> <br>
+            <button type="button" onclick="updateUserInfo()">업데이트</button>
+        </form>
+    </div>
+    <script>
+        const url = new URL(location.href);
+        const params = url.searchParams;
+        const uiNum = params.get('uiNum');
+        console.log(uiNum);
+
+
+
+        window.addEventListener('load', async function () {
+            const res = await fetch(`/team5/user-infos/${uiNum}`);
+            const user = await res.json();
+            console.log(user);
+            for (let key in user) {
+                if (document.querySelector('#' + key)) {
+                    document.querySelector('#' + key).value = user[key];
+                }
+            }
+        });
+
+        async function updateUserInfo() {
+            const data = {
+                uiNum: uiNum,
+                uiName: document.querySelector('#uiName').value,
+                uiPwd: document.querySelector('#uiPwd').value,
+                uiMobile: document.querySelector('#uiMobile').value,
+                uiBirth: document.querySelector('#uiBirth').value
+            };
+
+            const json = JSON.stringify(data);
+            console.log(json);
+            const res = await fetch(`/team5/user-infos/${uiNum}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: json
+            });
+
+            const result = await res.text();
+            if (result == 1) {
+                alert('수정 완료');
+                location.href = "/team5/tmpl/user-info/list";
+            } else {
+                alert('수정 실패');
+            }
+        }
+    </script>
+</body>
+
+</html>

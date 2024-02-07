@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Jack</title>
+    <link rel="stylesheet" th:href="@{/team2/css/blackjack.css}">
+    <link rel="stylesheet" th:href="@{/index/css/head.css}">
+</head>
+
+<body>
+	<div class="button" id="button" style="position: absolute; top: 100px; left: 300px;"></div>
+    <div id="dealer-cards">
+        <img id="hidden" th:src="@{/team2/img/cards/BACK.png}">
+    </div>
+    <div id="play-info">
+        <h2 id="dealer-info">Dealer: <span id="dealer-sum"></span></h2>
+        <h2 id="your-info">You: <span id="your-sum"></span></h2>
+    </div>
+    <div id="your-cards"></div>
+
+    <div id="buttons">
+        <button id="hit"><img th:src="@{/team2/img2/hit.png}" width="100px" height="50px"></button>
+        <button id="stand"><img th:src="@{/team2/img2/stand.png}" width="100px" height="50px"></button>
+        <button id="next-round" style="display: none;"></button>
+        <button id="restart" style="display: none;"><img th:src="@{/team2/img2/restart.png}" width="300px" height="100px"></button>
+    </div>
+    <p id="results"></p>
+
+    <h2 style="margin:0;" id="roundNum">Round: <span id="round-number">1</span></h2>
+    <div id="round-history">
+        <h2>라운드 결과:</h2>
+        <ul id="round-results"></ul>
+    </div>
+    <h2 id="credit">현재 금액: <span id="user-money">100</span></h2><br>
+    <div id="bet-info">
+        <label for="bet" id="betM">베팅 금액 : </label>
+        <input type="number" id="bet" min="10" step="10">
+        <button id="place-bet"><img th:src="@{/team2/img2/bet.png}" width="50px" height="50px"></button>
+    </div>
+    <button id="saveButton"><img th:src="@{/team2/img/save.png}" width="50px" height="50px"></button>
+	<script>
+	const uiNum = '[[${session.user.uiNum}]]';
+	</script>
+	<script th:src="@{/team2/js/blackjack.js}"></script>
+	<script th:src="@{/index/js/head.js}"></script>
+</body>
+</html>

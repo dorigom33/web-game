@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타자 게임</title>
+    <link rel="stylesheet" th:href="@{/team2/css/game.css}"> <!-- 경로 수정 -->
+    <link rel="stylesheet" th:href="@{/index/css/head.css}">
+
+</head>
+<body>
+<div class="button" style="display: flex; position: absolute; left: 80px; top: 10px;" id="button"></div>
+    <div class="game-container">
+        <h1>디펜스 게임</h1>
+        <div id="info">
+            <div th:if="${session.user} != null">
+                <span th:text="${session.user.uiName}"></span><br>
+            </div>
+            <div id="tries">남은 횟수: 5</div>
+        </div>
+        <input type="text" id="wordInput" placeholder="단어를 입력하세요" disabled>
+        <div id="message"></div>
+
+    </div>
+    <div id="castle" alt="Castle"></div>
+    <div class="word-container" id="wordContainer">
+    </div>
+    <button id="startButton"><img th:src="@{/team2/img/start.png}"> <!-- 경로 수정 --></button>
+    <div class="score-container" id="scoreContainer">
+        <div id="timer">시간: 0</div>
+        <div id="score">현재 점수: 0</div>
+    </div>
+    <div class="max-container" id="maxContainer">
+        <div id="myMax">내 최고점수: <span id="myMaxScore"></span><br></span></div>
+    </div>
+    <audio id="backgroundMusic" th:src="@{/team2/bgm/Game bgm.mp3}" preload="auto" loop hidden></audio>
+    <audio id="arrowSound" th:src="@{/team2/Esound/fireBall1.wav}"></audio>
+    <audio id="flyingSound" th:src="@{/team2/Esound/fireBall2.mp3}"></audio>
+    <audio id="hitSound" th:src="@{/team2/Esound/fireBallHit.wav}"></audio>
+    <audio id="failSound" th:src="@{/team2/Esound/failSound.wav}"></audio>
+    <audio id="destSound" th:src="@{/team2/Esound/CAST_02.wav}"></audio>
+    <audio id="clearSound" th:src="@{/team2/Esound/clearSound.wav}"></audio>
+    <div id="alignButton"></div>
+    <button id="musicToggleButton"><img th:src="@{/team2/img/sound.png}" width="50px" height="50px"></button>
+    <button id="restartButton" style="display: none;"><img th:src="@{/team2/img/restart.png}" width="50px" height="50px"></button>
+    <button id="saveButton"><img th:src="@{/team2/img/save.png}" width="50px" height="50px"></button>
+
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <script>
+    const uiNum = '[[${session.user.uiNum}]]';
+        window.addEventListener('load',async function(){
+            const res = await fetch('/team2/point-infos/max?giNum=8');
+            const point = await res.json();
+            document.querySelector('#myMaxScore').innerHTML = `<b>${point.piPoint}</b>`;
+        });
+    </script>
+    <script th:src="@{/team2/js/game.js}"></script>
+    <script th:src="@{/index/js/head.js}"></script>
+</body>
+</html>

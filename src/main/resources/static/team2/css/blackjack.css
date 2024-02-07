@@ -1,0 +1,139 @@
+body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    background-image: url("/team2/img2/blackjack_background.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+#dealer-cards{
+    position: absolute;
+    width: 100%;
+    top:20%;
+}
+#play-info{
+    width: 100%;
+    position: absolute;
+    top:40%;
+}
+
+#play-info #dealer-info {
+    color : red;
+}
+
+#play-info #your-info {
+    color : blue;
+}
+
+#your-cards{
+    position: absolute;
+    width: 100%;
+    top:55%;
+}
+
+#dealer-cards img,
+#your-cards img {
+    height: 150px;
+    width: 100px;
+    margin: 1px;
+}
+
+#bet-info{
+    position: absolute;
+    width:350px;
+    height:50px;
+    top:50%;
+    left:10%;
+}
+
+#bet-info #place-bet{
+    background-color: rgb(255, 255, 255,0);
+    border: none;
+    position: relative;
+    top: 20px;
+
+}
+
+#bet-info #betM {
+    color : white;
+
+}
+
+#credit{
+    position:absolute;
+    left:20%;
+    bottom:30%;
+    color:white;
+}
+
+#buttons {
+    position: absolute;
+    width:300px;
+    height: 200px;
+    top:30%;
+    left:10%;
+}
+#buttons button{
+    position: absolute;
+    background-color: rgb(255, 255, 255,0);
+    border: none;
+}
+#buttons #hit {
+    width: 100px;
+    height: 50px;
+    left:0;
+    bottom:0;
+}
+
+#buttons #stand {
+    width: 100px;
+    height: 50px;
+    right:0;
+    bottom:0;
+}
+
+#buttons #next-round {
+    width: 100px;
+    height: 100px;
+    font-size: 20px;
+    display: block;
+    background-image: url("/team2/img2/nextRound.png");
+    background-size: 100% 100%;
+    padding: 0;
+    top:0;
+    left:0;
+}
+#buttons #restart {
+    width: 100px;
+    height: 100px;
+    display: none;
+    margin: 10px auto;
+    top:50%;
+    left:50%;
+}
+
+#roundNum{
+    position:absolute;
+    right:17%;
+    top:40%;
+    color:white;
+}
+
+#round-history{
+    position: absolute;
+    right:15%;
+    top:42%;
+    color : white;
+}
+
+#saveButton{
+    border:none;
+    background-color: rgba( 255, 255, 255, 0 );
+    position: absolute;
+    top:10px;
+    right:10px;
+}

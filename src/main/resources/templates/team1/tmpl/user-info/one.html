@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Details</title>
+    <script src="/team1/js/common.js"></script>
+  </head>
+  <body>
+    <h3>사용자 상세 정보</h3>
+    <table border="1">
+      <tbody id="userDetails">
+        <tr>
+          <th>번호</th>
+          <td id="uiNum"></td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td id="uiName"></td>
+        </tr>
+        <tr>
+          <th>아이디</th>
+          <td id="uiId"></td>
+        </tr>
+        <tr>
+          <th>휴대폰</th>
+          <td id="uiMobile"></td>
+        </tr>
+        <tr>
+          <th>이메일</th>
+          <td id="uiEmail"></td>
+        </tr>
+        <tr>
+          <th>생년월일</th>
+          <td id="uiBirth"></td>
+        </tr>
+        <tr>
+          <th>등록일</th>
+          <td id="credat"></td>
+        </tr>
+        <tr>
+          <th>수정일</th>
+          <td id="lmodat"></td>
+        </tr>
+        <tr>
+          <th>조회수</th>
+          <td id="active"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button onclick="location.href='/team1/tmpl/user-info/update.html?uiNum='+document.querySelector('#uiNum').textContent">
+      수정
+    </button>
+    <button onclick="deleteUser()">삭제</button>
+    <script>
+      async function deleteUser() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const uiNum = urlParams.get('uiNum');
+        if (confirm('사용자 정보를 삭제하시겠습니까?')) {
+          const res = await fetch(`/team1/user-infos/${uiNum}`, {
+            method: 'DELETE',
+          });
+          if (res.status === 200) {
+            alert('사용자 정보가 삭제되었습니다.');
+            location.href = '/team1/tmpl/user-info/list';
+          } else {
+            alert('사용자 정보 삭제에 실패했습니다.');
+          }
+        }
+      }
+      window.addEventListener('load', async function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const uiNum = urlParams.get('uiNum');
+
+        const res = await fetch(`/team1/user-infos/${uiNum}`);
+        const user = await res.json();
+        for(const key in user){
+          if(document.querySelector('#' + key)){
+            document.querySelector('#' + key).innerText = user[key];
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

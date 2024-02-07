@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Team1 Game</title>
+    <link rel="stylesheet" href="/index/css/head.css" />
+    <style>
+      /* Orbitron 폰트 추가 */
+
+      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+      /* 공통 스타일 */
+      :root {
+        --primary-color: #0a1931;
+        --secondary-color: #33004c;
+        --text-color: #ffffff;
+        --font-family: 'Orbitron', sans-serif;
+      }
+
+      /* 전체 스타일 */
+      body {
+        background-image: url(https://user-images.githubusercontent.com/101033246/270906584-ddfa728e-b0fd-42a4-ad62-49bf8498c687.gif);
+        background-size: cover;
+        font-family: var(--font-family);
+        color: var(--text-color);
+        text-align: center;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .logo {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 60px;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 2px solid var(--text-color);
+        animation: typing 3s steps(40) forwards,
+          changeColor 2s ease-in-out infinite alternate;
+      }
+
+      .logo a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .logo a:hover {
+        color: var(--secondary-color);
+        text-decoration: none;
+      }
+
+      .user-info {
+        margin-top: 2rem;
+      }
+
+      /* 로그인 및 회원가입 스타일 */
+      .login-register a {
+        text-decoration: none; /* 밑줄 제거 */
+        background-color: var(--secondary-color);
+        color: var(--text-color);
+        margin: 5px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 15px;
+      }
+
+      .login-register a:hover {
+        background-color: var(--text-color);
+        color: var(--secondary-color);
+      }
+
+      .logout-button {
+        padding: 0.3rem 0.8rem 0.2rem 0.8rem;
+        margin-left: 0.2rem;
+        border-radius: 0.8rem;
+        border-style: none;
+        background-color: #33004c;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .logout-button:hover {
+        padding: 0.3rem 0.8rem 0.2rem 0.8rem;
+        border-radius: 0.8rem;
+        border-style: none;
+        background-color: #fff;
+        color: #33004c;
+      }
+
+      /* 게임 이미지 스타일 */
+      .game-images {
+        position: relative;
+        overflow: hidden;
+        bottom: 4rem;
+      }
+
+      /* 슬라이더 스타일 */
+      .slider {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        margin-top: 5rem;
+      }
+
+      .slide {
+        flex: 0 0 100%;
+      }
+
+      .container {
+        position: relative;
+      }
+
+      /* 버튼 스타일링 */
+      .prev-button,
+      .next-button {
+        position: absolute;
+        top: 60%;
+        transform: translateY(-50%);
+        background-color: var(--secondary-color);
+        color: var(--text-color);
+        padding: 10px 20px;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+      }
+
+      .prev-button {
+        left: 20px;
+      }
+
+      .next-button {
+        right: 20px;
+      }
+
+      .prev-button:hover,
+      .next-button:hover {
+        background-color: #bd86ef;
+      }
+
+      /* 이미지 호버 효과 스타일 */
+      .hovImage {
+        max-width: 100%;
+        transition: filter 0.3s ease;
+      }
+
+      .container:hover .hovImage {
+        filter: brightness(80%);
+      }
+
+      /* 텍스트 호버 효과 스타일 */
+      .hovText {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -500%);
+        z-index: 2;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        color: var(--text-color);
+        font-size: 36px;
+      }
+
+      .container:hover .hovText {
+        opacity: 1;
+      }
+
+      /* 타자치는 애니메이션 효과 */
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 27%;
+        }
+      }
+
+      /* 텍스트 색상 변경 애니메이션 효과 */
+      @keyframes changeColor {
+        from {
+          color: #fff;
+        }
+        to {
+          color: var(--secondary-color);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <div class="logo">
+      <a>Welcome!</a>
+    </div> -->
+    <div class="button" id="button" style="position: absolute; left: 550px; top:120px;"></div>
+    <div class="logo">
+      <a>Team1 Game Page!</a>
+    </div>
+    <div class="login-register" th:if="${session.user} == null">
+      <div>
+        <a href="/team1/tmpl/user-info/login">로그인</a>
+        <a href="/team1/tmpl/user-info/join">회원가입1</a>
+      </div>
+    </div>
+
+    <div class="game-images" th:if="${session.user} != null">
+      <div class="login-register" th:if="${session.user} != null">
+        <div class="user-info">
+          <span
+            th:text="'안녕하세요! ' + ${session.user.uiName} + '님 반갑습니다!'"
+          ></span>
+          <button class="logout-button" onclick="logout()">로그아웃</button>
+        </div>
+      </div>
+
+      <div class="slider">
+        <div class="slide">
+          <a th:href="@{/team1/tmpl/game/2048/index?giNum=10}" class="container">
+            <img
+              style="width: 400px; border-radius: 10px"
+              th:src="@{/team1/imgs/2.png}"
+              alt="2048"
+              class="hovImage"
+            />
+            <span class="hovText">Play?</span>
+          </a>
+        </div>
+        <div class="slide">
+          <a th:href="@{/team1/tmpl/game/frog/index?giNum=11}" class="container">
+            <img
+              style="width: 400px; border-radius: 10px"
+              th:src="@{/team1/imgs/3.jpeg}"
+              alt="개구리 게임"
+              class="hovImage"
+            />
+            <span class="hovText">Play?</span>
+          </a>
+        </div>
+      </div>
+      <button class="prev-button">&lang;</button>
+      <button class="next-button">&rang;</button>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const slider = document.querySelector('.slider');
+        const slides = document.querySelectorAll('.slide');
+        const prevButton = document.querySelector('.prev-button');
+        const nextButton = document.querySelector('.next-button');
+
+        let slideIndex = 0;
+
+        // 이전 슬라이드로 이동
+        prevButton.addEventListener('click', function () {
+          slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+          updateSlide();
+        });
+
+        // 다음 슬라이드로 이동
+        nextButton.addEventListener('click', function () {
+          slideIndex = (slideIndex + 1) % slides.length;
+          updateSlide();
+        });
+
+        // 슬라이드 업데이트 함수
+        function updateSlide() {
+          const slideWidth = slides[0].clientWidth;
+          slider.style.transform = `translateX(-${slideIndex * slideWidth}px)`;
+        }
+      });
+
+      async function logout() {
+        let isLogout = confirm('로그아웃 하시겠습니까?');
+        if (isLogout) {
+          const res = await fetch('/team1/logout', { method: 'POST' });
+          const msg = await res.json();
+          console.log(msg.msg);
+          alert(msg.msg);
+          if (msg.url) {
+            location.href = msg.url;
+          }
+        }
+      }
+    </script>
+    <script th:src="@{/index/js/head.js}"></script>
+  </body>
+</html>

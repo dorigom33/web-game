@@ -1,0 +1,82 @@
+#colorText {
+    font-family: 'Dongle', sans-serif;
+  }
+
+  #point {
+    font-family: 'Jua', sans-serif;
+  }
+
+  #pointText {
+    font-family: 'Dongle', sans-serif;
+  }
+
+  #maxScore {
+    font-family: 'Jua', sans-serif;
+  }
+
+  .custom-cursor {
+    cursor: none;
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    background-image: url("/team3/imgs/hamer.png ");
+    background-size: cover;
+    pointer-events: none;
+  }
+
+  body {
+    background-color: rgb(226, 204, 133);
+    display: flex;
+    justify-content: center;
+  }
+
+
+  #startButton {
+    cursor: none;
+    display: inline-block;
+    background-color: transparent;
+    border: none;
+  }
+
+  #startButton:hover {
+    cursor: pointer;
+  }
+
+  #colorText {
+    font-size: 120px;
+    margin-top: 0;
+  }
+
+  #point {
+    font-size: 80px;
+  }
+
+  #imgBtn {
+    display: inline-block;
+    background-color: transparent;
+    border: none;
+  }
+
+  table {
+    width: 500px;
+    table-layout: fixed;
+    font-family: 'Dongle', sans-serif;
+    font-size: 25px;
+  }
+
+  canvas {
+    background: #eee;
+    border: 1px solid black;
+    display: block;
+    margin: 0 auto;
+  }
+
+  #moleDiv {
+  border: 3px solid;
+  border-radius: 10%;
+    display: flex;
+    justify-content: center;
+    background-image: url("/team3/imgs/background.jpg");
+    width: 900px;
+    height: 900px;
+  }

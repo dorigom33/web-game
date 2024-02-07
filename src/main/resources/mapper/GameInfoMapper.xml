@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.game.mapper.GameInfoMapper">
+	<select id="selectGameInfos" resultType="com.game.vo.GameInfoVO">
+		SELECT *
+		FROM GAME_INFO
+		WHERE TEAM = #{team}
+	</select>
+	<select id="selectGameInfo" resultType="com.game.vo.GameInfoVO">
+		SELECT 
+			UI_NUM, UI_NAME, UI_ID, UI_PWD, 
+			UI_MOBILE, UI_EMAIL, UI_BIRTH, CREDAT, 
+			LMODAT, ACTIVE
+			FROM GAME_INFO
+			WHERE UI_NUM = #{uiNum}
+			AND TEAM = #{team}
+			;
+	</select>
+	<select id="selectGameInfoByIdAndPwd" resultType="com.game.vo.GameInfoVO">
+		SELECT UI_NUM, UI_NAME, UI_ID, UI_PWD, UI_MOBILE, UI_EMAIL, UI_BIRTH, CREDAT, LMODAT, ACTIVE
+		FROM GAME_INFO
+		WHERE UI_ID = #{uiId}
+		AND UI_PWD = #{uiPwd}
+	</select>
+	<insert id="insertGameInfo" parameterType="com.game.vo.GameInfoVO">
+		INSERT INTO GAME_INFO(UI_NUM, GI_NUM, POINT)
+		VALUES(#{uiNum}, #{giNum}, #{point})
+	</insert>
+	<update id="updateGameInfo" parameterType="com.game.vo.GameInfoVO">
+		UPDATE GAME_INFO
+		SET UI_NAME=#{uiName},
+		UI_PWD=#{uiPwd},
+		UI_MOBILE=#{uiMobile},
+		UI_EMAIL=#{uiEmail},
+		UI_BIRTH=#{uiBirth},
+		LMODAT=#{lmodat},
+		ACTIVE=#{active}
+		WHERE UI_NUM=#{uiNum}
+	</update>
+	<delete id="deleteGameInfo" parameterType="int">
+		DELETE FROM GAME_INFO WHERE UI_NUM=#{uiNum}
+	</delete>
+</mapper>

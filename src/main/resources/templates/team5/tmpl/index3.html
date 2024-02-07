@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/team5/css/front.css}" />
+    <link rel="stylesheet" href="/index/css/head.css" />
+  </head>
+
+  <body>
+    <input id="uiNum" type="hidden" th:value="${session.user.uiNum}">
+    <div class="button" id="button" style="position: absolute; left: 200px;"></div>
+    <div class="container">
+      <div class="header">
+        <p>Score: <span id="score">0</span></p>
+        <p>LIFE: <span id="lives"></span></p>
+      </div>
+      <!-- 클릭하기 전에 '클릭하면 시작한다'고 알려주려고 임시로 만든거임 -->
+      <span id="startMsg" style="font-size: xx-large; font-weight: bolder"
+        >클릭하면 시작함</span
+      >
+      <canvas id="gameCanvas" width="1080px" height="900px"> </canvas>
+    </div>
+
+
+    <div style="display: none;">
+      <audio th:src="@{/team5/soundEffect/attack_block.mp3}" id="attack_block"></audio>
+      <audio th:src="@{/team5/soundEffect/eat_item.mp3}" id="eat_item"></audio>
+      <audio th:src="@{/team5/soundEffect/paddle.mp3}" id="paddle_sound"></audio>
+      <audio th:src="@{/team5/soundEffect/stageClear.mp3}" id="stageClear"></audio>
+    </div>
+
+    <script th:src="@{/team5/js/audio.js}"></script>
+    <script th:src="@{/team5/js/hdi.js}"></script>
+    <script th:src="@{/team5/js/jhj.js}"></script>
+    <script th:src="@{/team5/js/isk.js}"></script>
+    <script th:src="@{/team5/js/rsh.js}"></script>
+    <script th:src="@{/team5/js/main2.js}"></script>
+    <script th:src="@{/index/js/head.js}"></script>
+  </body>
+</html>

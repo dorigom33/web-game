@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- @{}은 컨텍스트 루트 -->
+    <link rel="stylesheet" th:href="@{/team5/css/index.css}" />
+    <link rel="stylesheet" href="/index/css/head.css" />
+</head>
+
+<body>
+	<div class="button" id="button" style="position: absolute; left: 550px; top: 200px;"></div>
+    <!-- 로그아웃 버튼 -->
+    <div class="logout" th:if="${session.user} != null">
+        <button class="logoutbtn" onclick="logout()">로그아웃</button>
+    </div>
+    <!-- 내용들 -->
+    <div class="container">
+        <!-- 타이틀 -->
+        <h1 id="title" class="title"> 안녕하세요 Team5 페이지 입니다.</h1>
+        <!-- 로그인 한 유저가 없으면 -->
+        <div th:if="${session.user} == null">
+            <div id="sign">
+                <button class="btn2" onclick="location.href='/team5/tmpl/user-info/login'"><span>로그인</span></button><br>
+                <button class="btn2" onclick="location.href='/team5/tmpl/user-info/join'"><span>회원가입</span></button>
+            </div>
+        </div>
+        <!-- 로그인 한 유저가 있으면 -->
+        <div th:if="${session.user} != null">
+            <div class="introduce"> <span id="userName" th:text="${session.user.uiName}"></span>님 안녕하세요.</div> <br>
+            <ul></ul>
+            <div id="maxScore"></div>
+            <!-- 마우스 커서 올리면 애니메이션 나오는 버튼 -->
+            <div id="game1">
+                <button class="btn" onclick="gotoTetrisPage()"><span id="gameName">테트리스 하러 가기</span></button>
+                <ul></ul>
+                <button class="btn" onclick="location.href='/team5/tmpl/user-info/rank'"><span id="ranking">테트리스 점수 보러가기</span></button><br>
+            </div>
+            <br>
+            <br>
+            <div id="maxScore2"></div>
+            <div id="game1">
+                <button class="btn" onclick="gotoBreakWallPage()"><span id="gameName">벽돌깨기 하러 가기</span></button>
+                <ul></ul>
+                <button class="btn" onclick="location.href='/team5/tmpl/user-info/rank2'"><span id="ranking2">벽돌깨기 점수 보러가기</span></button>
+            </div>
+        </div>
+    </div>
+    <!-- 스크립트 넣기 싫엇는데 간단한 로직이라 그냥 여따 넣엇습니다. -->
+    <script>
+        let giNum;
+
+        function gotoTetrisPage() {
+            location.href = '/team5/tmpl/index2';
+        }
+
+        function gotoBreakWallPage() {
+            location.href = '/team5/tmpl/index3';
+        }
+		// 2023.12.21 최재환 수정
+//         function logout() {
+
+//             location.href = '/team5/logout'
+//         }
+        async function logout() {
+        	let isLogout = confirm('로그아웃 하시겠습니까?');
+            if (isLogout) {
+              const res = await fetch('/team5/logout', { method: 'POST' });
+              const msg = await res.json();
+              console.log(msg.msg);
+              alert(msg.msg);
+              if (msg.url) {
+                location.href = msg.url;
+              }
+            }
+          }
+
+        // window.addEventListener('load', async function(){
+
+        //         const res = await fetch('/game-info');
+        //         const game = await res.json();
+        //         console.log(game);
+        //         const spanText = document.querySelector('#gameName');
+        //         let html = '';
+        //         for(let key of game){
+        //             let str = key.giName + ' 하러 가기';
+        //             giNum = key.giNum;
+        //             html += `<button class="btn" onclick="location.href='/index${giNum}'"><span id="gameName">${str}</span></button><br>`;
+        //         }
+        //         document.querySelector('#gamesLink').innerHTML = html;
+        // });
+
+        window.addEventListener('load', async function(){
+            const res = await fetch('/team5/point-infos/max?giNum=4');
+            const point = await res.json();
+
+            let html = `<span id="point">테트리스 최대점수는 ${point.piPoint}점 입니다 </span>`
+            document.querySelector('#maxScore').innerHTML = html;
+        })
+
+        window.addEventListener('load', async function(){
+            const res = await fetch('/team5/point-infos/max?giNum=5');
+            const point = await res.json();
+
+            let html = `<span id="point">벽돌깨기 최대점수는 ${point.piPoint}점 입니다 </span>`
+            document.querySelector('#maxScore2').innerHTML = html;
+        })
+    </script>
+    <script th:src="@{/index/js/head.js}"></script>
+</body>
+
+</html>

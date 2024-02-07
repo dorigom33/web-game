@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- @{}은 컨텍스트 루트 -->
+    <link rel="stylesheet" th:href="@{/team5/css/table.css}" />
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>TEAM 5 유저 리스트</h1>
+        <form>
+            <input type="text" name="uiName" placeholder="이름" th:value="${param.uiName}">
+            <button onclick="location.href='/team5/tmpl/user-info/insert'">검색</button>
+        </form>
+        <br>
+        <table class="rwd-table">
+            <tr>
+                <th>번호</th>
+                <th>이름</th>
+                <th>아이디</th>
+                <th>제작일</th>
+            </tr>
+            <tbody id="UserBody">
+            </tbody>
+        </table>
+        <br>
+        <button onclick="location.href='/team5/tmpl/user-info/join'" class="btn">유저 추가 하러 가기</button>
+    </div>
+    <script>
+        window.addEventListener('load', async function () {
+            const res = await fetch('/team5/user-infos');
+            const users = await res.json();
+            let html = '';
+            for (const user of users) {
+                html += '<tr>';
+                html += `<td>${user.uiNum}</td>`;
+                html += `<td><a href="/team5/tmpl/user-info/member?uiNum=${user.uiNum}">${user.uiName}</a></td>`;
+                html += `<td>${user.uiId}</td>`;
+                html += `<td>${user.credat}</td>`;
+                //  html += `<td>${user.uiBirth}</td>`;
+                // html += `<td>${user.uiEmail}</td>`;
+                // html += `<td>${user.uiMobile}</td>`;
+                html += '</tr>';
+            }
+            document.querySelector('#UserBody').innerHTML = html;
+        })
+    </script>
+</body>
+
+</html>

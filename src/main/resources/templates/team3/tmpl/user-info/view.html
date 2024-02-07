@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h3>View</h3>
+    <table border="1">
+      <tr>
+        <th>번호</th>
+        <th>이름</th>
+        <th>아이디</th>
+        <th>비밀번호</th>
+        <th>핸드폰 번호</th>
+        <th>이메일</th>
+        <th>생일</th>
+        <th>생성일</th>
+        <th>마지막 수정일</th>
+        <th>활성화</th>
+      </tr>
+      <tbody id="tBody"></tbody>
+    </table>
+    <button onclick="userDelete()">Delete</button>
+    <button onclick="location.href=`/team3/tmpl/user-info/update?uiNum=${param}`">Update</button>
+    <script>
+      const urlParams = new URL(location.href).searchParams;
+      const param = urlParams.get("uiNum");
+
+      window.addEventListener("load", async function () {
+        const res = await fetch(`/team3/user-infos/${param}`);
+        const user = await res.json();
+
+        let html = "";
+        html += "<tr>";
+        html += `<td>${user.uiNum}</td>`;
+        html += `<td>${user.uiName}</td>`;
+        html += `<td>${user.uiId}</td>`;
+        html += `<td>${user.uiPwd}</td>`;
+        html += `<td>${user.uiMobile}</td>`;
+        html += `<td>${user.uiEmail}</td>`;
+        html += `<td>${user.uiBirth}</td>`;
+        html += `<td>${user.credat}</td>`;
+        html += `<td>${user.lmodat}</td>`;
+        html += `<td>${user.active}</td>`;
+        html += "</tr>";
+        document.querySelector("#tBody").innerHTML = html;
+      });
+
+      async function userDelete() {
+
+        const data = {
+          uiNum: `${param}`,
+        };
+
+        const json = JSON.stringify(data);
+
+        const res = await fetch(`/team3/delete/${param}`, {
+          method: "DELETE",
+          body: json,
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+        });
+
+        const msg = await res.json();
+        alert(msg.msg);
+        if (msg.url) {
+          location.href = msg.url;
+        }
+      }
+    </script>
+  </body>
+</html>

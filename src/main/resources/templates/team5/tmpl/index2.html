@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team 5 테트리스</title>
+
+  <link rel="stylesheet" th:href="@{/team5/css/bg.css}" />
+  <link rel="stylesheet" href="/index/css/head.css" />
+</head>
+
+<body>
+  <input id="uiNum" type="hidden" th:value="${session.user.uiNum}">
+  <div class="button" id="button" style="position: absolute; top: 15px; left: 350px;"></div>
+  <div id="game-container">
+    <!-- 게임 요소를 감싸는 메인 컨테이너 -->
+    <div class="container" id="canvas-container">
+      <!-- Tetris 게임 캔버스를 포함하는 컨테이너 -->
+      <div class="container" id="left-container">
+        <!-- 설명문 -->
+        <h2>Team5 </h2>
+        <h3>KeepBlock</h3>
+        <canvas class="container" id="saveblock-container"></canvas>
+        <div>
+          <h2>키 설명</h2>
+        </div>
+
+        <div style="font-size:15px;">
+          <h2>Z</h2>
+          <p>왼쪽회전</p>
+          <h2>C</h2>
+          <p>오른쪽회전</p>
+          <h2>B</h2>
+          <p>BGM 버튼</p>
+          <h2>SPACE BAR</h2>
+          <p>한번에 내리기</p>
+          <h2>Shift</h2>
+          <p>블럭저장</p>
+        </div>
+      </div>
+      <!-- 가운데 -->
+      <canvas id="tetrisCanvas"></canvas>
+      <!-- 오른쪽 -->
+      <div class="container" id="right-container">
+        <!-- 점수 및 캔버스를 포함하는 컨테이너 -->
+        <h3>Next Block_1</h3>
+        <canvas class="container" id="block-container"></canvas>
+        <h3>Next Block_2</h3>
+        <canvas class="container" id="block-container2"></canvas>
+        <h2>Score</h2>
+        <!-- "Score" 텍스트 헤더 (하얀색) -->
+        <h2 id="score">0</h2>
+        <!-- 점수를 표시하는 단락 요소 (초기값 0, 하얀색) -->
+        <br />
+        <br />
+        <div class="direction-keys">
+          <!-- 조작 방향키를 포함하는 컨테이너 -->
+          <div></div>
+          <div class="rotate-key" id="upKey">
+            <span>↑</span>
+            <!-- 위쪽 방향키 -->
+          </div>
+          <div></div>
+          <div class="direction-key" id="leftKey">←</div>
+          <!-- 왼쪽 방향키 -->
+          <div class="direction-key" id="downKey">↓</div>
+          <!-- 아래쪽 방향키 -->
+          <div class="direction-key" id="rightKey">→</div>
+          <!-- 오른쪽 방향키 -->
+          <div></div>
+        </div>
+
+        <br>
+        <div class="direction-keys">
+          <!-- 조작 방향키를 포함하는 컨테이너 -->
+          <div></div>
+          <div></div>
+          <div></div>
+          <!-- Z키 -->
+          <div class="direction-key" id="zKey">Z</div>
+          <div></div>
+          <!-- C키 -->
+          <div class="direction-key" id="cKey">C</div>
+          <div></div>
+        </div>
+        <div class="direction-key-space" id="shiftKey">Shift</div>
+        <div class="direction-key-space" id="spaceKey">SPACE BAR</div>
+        <div id="startBtn" class="startBtn" onclick="main()">시작</div>
+      </div>
+    </div>
+
+
+  <div style="display: none;">
+    <!-- bgm은 b버튼으로 재생 -->
+
+    <audio th:src="@{/team5/bgm/Tetris 99  Main Theme.mp3}" id="bgm" loop></audio>
+    <audio th:src="@{/team5/bgm/The Tune of the Azure Light Gleam Version.mp3}" id="bgm2" loop></audio>
+    <audio th:src="@{/team5/bgm/Car Maintenance.mp3}" id="bgm3" loop></audio>
+    <audio th:src="@{/team5/soundEffect/clear_line.mp3}" id="clear_line"></audio>
+    <audio th:src="@{/team5/soundEffect/drop.mp3}" id="drop"></audio>
+    <audio th:src="@{/team5/soundEffect/game_over.mp3}" id="game_over"></audio>
+    <audio th:src="@{/team5/soundEffect/swap.mp3}" id="swap"></audio>
+
+  </div>
+  <script th:src="@{/team5/js/audio.js}"></script>
+  <script th:src="@{/team5/js/function.js}"></script>
+  <script th:src="@{/team5/js/block.js}"></script>
+  <script th:src="@{/team5/js/canvas.js}"></script>
+  <script th:src="@{/team5/js/main.js}"></script>
+  <script th:src="@{/index/js/head.js}"></script>
+</body>
+
+</html>

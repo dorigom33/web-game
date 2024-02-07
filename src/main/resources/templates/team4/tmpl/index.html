@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/team4/css/index-style.css}" rel="stylesheet">
+    <link rel="stylesheet" href="/index/css/head.css" />
+    <title>Document</title>
+</head>
+
+<body>
+    <div th:if="${session.user} == null">
+        <script>
+            window.location.href = "/team4/tmpl/user-info/login";
+        </script>
+    </div>
+    <div class="button" id="button" style="position: absolute; left: 500px;"></div>
+    <div class="white-box" th:if="${session.user} != null">
+        <span th:text="${session.user.uiName}"></span>님 안녕하세요.<br>
+        <div id="game-grid">
+            <div class="game-cell">
+                <a th:href="@{/team4/tmpl/game/minesweeper?uiNum={uiNum}(uiNum=${session.user.uiNum})}" id="giNum1">
+                    <img th:src="@{/team4/imgs/minesweeper.png}" alt="지뢰찾기" width="100px"><br>
+                    <span>지뢰찾기</span>
+                </a>
+            </div>
+            <div class="game-cell">
+                <a th:href="@{/team4/tmpl/game/break-out?uiNum={uiNum}(uiNum=${session.user.uiNum})}" id="giNum2">
+                    <img th:src="@{/team4/imgs/break-out.png}" alt="벽돌깨기" width="100px"><br>
+                    <span>벽돌깨기</span>
+                </a>
+            </div>
+            <div class="game-cell">
+                <a th:href="@{/team4/tmpl/game/puzzle-arrows?uiNum={uiNum}(uiNum=${session.user.uiNum})}" id="giNum3">
+                    <img th:src="@{/team4/imgs/arrow.png}" alt="PuzzleArrows" width="100px"><br>
+                    <span>PuzzleArrows</span>
+                </a>
+            </div>
+        </div>
+        <script>
+            window.addEventListener('load', async function () {
+                const res = await fetch('/team4/game-infos');
+                const games = await res.json();
+                console.log(games);
+                for (const game of games) {
+                    const getGameInfo = document.querySelector('#giNum' + game.giNum);
+                    if (getGameInfo) {
+                        getGameInfo.setAttribute('href', getGameInfo.getAttribute('href') + '&giNum=' + game.giNum);
+                    }
+                }
+            })
+        </script>
+        <script th:src="@{/index/js/head.js}"></script>
+</body>
+
+</html>

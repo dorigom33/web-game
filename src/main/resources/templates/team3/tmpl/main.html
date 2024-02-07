@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" th:href="@{/team3/css/main.css}">
+  <link rel="stylesheet" href="/index/css/head.css" />
+</head>
+
+
+<audio id="bgm" preload="auto">
+  <source th:src="@{/team3/bgm/lce.mp3}" type="audio/mpeg">
+
+</audio>
+<audio id="boingSound" preload="auto">
+  <source th:src="@{/team3/bgm/fire.mp3}" type="audio/mpeg">
+
+</audio>
+
+<body>
+	<div class="button" id="button" style="position: absolute; left: 180px;"></div>
+  <div style=" margin-right: 80px" >
+    <p id="pointText" style="font-size: 50px;;margin-bottom: 0;margin-top: 400px;">나의 최고 점수</p>
+    <div id="maxScore" style="font-size: 30px; text-align: center;"></div>
+  </div>
+
+  <div class="custom-cursor"></div>
+
+  <div id="moleDiv">
+    <div style="float: left;">
+
+      <div style="text-align: center">
+        <p id="colorText" style="margin: 0%;" margin-right="1000px" margin-left="1000px">두더지를 잡아라 !!!!!</p>
+      </div>
+
+      <div style="text-align: center">
+        <p id="point" style="margin: 0%;">Point : 0</p>
+      </div>
+
+      <div id="hole" style="margin-top: 0"></div>
+
+      <div style="text-align: center">
+        <button id="startButton" onclick="start()">
+          <img th:src="@{/team3/imgs/start.png}" width="150px" height="150px" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-left: 80px;margin-top: 250px;">
+    <table border="3" style="width: 300px; overflow: hidden;">
+      <tr>
+        <th>Rank</th>
+        <th>ID</th>
+        <th>Score</th>
+      </tr>
+      <tbody id="tBody">
+
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+
+  <script>
+    let html = "<table align='center' >";
+    let cnt = 1;
+    const arr = [];
+    let clickCount = 1; // 클릭 횟수를 추적할 변수
+    const maxClicks = 10; // 최대 클릭 횟수
+    let point = 0; // 점수
+    let currentColorValue = "";
+    let countText = 0; //라운드
+    const cursor = document.querySelector('.custom-cursor');
+    const canvas = document.querySelector('#gameCanvas');
+
+
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    });
+
+    for (let i = 1; i <= 2; i++) {
+      html += "<tr>";
+      for (let j = 1; j < 4; j++) {
+        html += '<td id="holeTd" width="200"><button id="imgBtn" onclick="upMsg(this)" data-num="' + cnt++ + '" disabled="disabled"><img src="/team3/imgs/hole.png" /></button></td>';
+      }
+      html += "</tr>";
+    }
+    html += "</table>";
+    document.querySelector("#hole").innerHTML = html;
+
+    function changeImg() {
+      const cells = document.querySelectorAll("#holeTd");
+      let randomCellIndex = Math.floor(Math.random() * cells.length);
+      let colorRandom = Math.random() < 0.5 ? "red" : "blue";
+
+      //  이미지 변경
+      for (let i = 0; i < cells.length; i++) {
+        if (i === randomCellIndex) {
+          let colorRandom = Math.random() < 0.5 ? "red" : "blue";
+          cells[i].innerHTML = `<button id="imgBtn" onclick="upMsg(this)" data-num="${randomCellIndex}" data-color="${colorRandom}"><img src="/team3/imgs/${colorRandom}.png"/></button>`;
+        } else {
+          cells[i].innerHTML = '<img src="/team3/imgs/hole.png" />';
+        }
+      }
+    }
+
+
+    function changeText() {
+      const colorTextElement = document.getElementById("colorText");
+      const textColors = ["빨간색", "파란색"];
+      const colorValues = ["red", "blue"];
+
+      const randomIndex = Math.floor(Math.random() * textColors.length);
+      const currentColor = textColors[randomIndex];
+      currentColorValue = colorValues[randomIndex];
+      colorTextElement.textContent = `${currentColor}`;
+      colorTextElement.style.color = currentColorValue;
+      countText++; //라운드
+      document.querySelector("#countText").innerHTML = countText;
+    }
+
+    // 뿅망치 사운드 재생 함수
+    function playBoingSound() {
+      var boingSound = document.getElementById("boingSound");
+      boingSound.play();
+    }
+
+    // 이미지 클릭 메소드
+    function changeText() {
+      const colorTextElement = document.getElementById("colorText");
+      const textColors = ["빨간색", "파란색"];
+      const colorValues = ["red", "blue"];
+
+      const randomIndex = Math.floor(Math.random() * textColors.length);
+      const currentColor = textColors[randomIndex];
+      currentColorValue = colorValues[randomIndex];
+      colorTextElement.textContent = `${currentColor}`;
+      colorTextElement.style.color = currentColorValue;
+      countText++; //라운드
+    }
+
+    // 뿅망치 사운드 재생 함수
+    function playBoingSound() {
+      var boingSound = document.getElementById("boingSound");
+      boingSound.play();
+    }
+
+    function upMsg(obj) {
+      const moleColor = obj.getAttribute("data-color");
+      const textColor = currentColorValue;
+      const cursor = document.querySelector(".custom-cursor");
+      const originalImg = obj.innerHTML;
+
+      // 다른 이미지로 변경
+      if (moleColor == "red") {
+        obj.innerHTML = `<img src="/team3/imgs/hit_red.png" />`;
+      } else if (moleColor == "blue") {
+        obj.innerHTML = `<img src="/team3/imgs/hit_blue.png" />`;
+      }
+
+      console.log(obj);
+
+      if (moleColor == textColor) {
+        ++point;
+        obj.disabled = true;
+        playBoingSound(); // 뿅망치 사운드 재생
+
+        const cursor = document.querySelector('.custom-cursor');
+
+        cursor.style.transform = 'rotate(270deg)';
+
+        // 1초 후에 망치를 다시 0도로 회전하여 올리는 애니메이션
+        setTimeout(() => {
+          cursor.style.transform = 'rotate(0deg)';
+        }, 500)
+      } else {
+        --point;
+        obj.disabled = true;
+        playBoingSound();
+
+        const cursor = document.querySelector('.custom-cursor');
+
+        cursor.style.transform = 'rotate(270deg)';
+
+        // 1초 후에 망치를 다시 0도로 회전하여 올리는 애니메이션
+        setTimeout(() => {
+          cursor.style.transform = 'rotate(0deg)';
+        }, 500)
+      }
+
+      document.querySelector("#point").innerHTML = 'Point : ' + point;
+
+      if (clickCount < maxClicks) {
+        // 클릭 횟수가 최대 횟수 미만일 때만 처리
+        console.log(clickCount);
+
+        clickCount++; // 클릭 횟수 증가
+      } else {
+        sendObj();
+        alert("게임이 종료 되었습니다! 점수는 : " + point);
+        location.reload(true);
+      }
+    }
+
+
+    function start() {
+      const countdownElement = document.getElementById("colorText"); // 텍스트 엘리먼트 가져오기
+      let countdown = 3; // 시작 카운트다운 시간 설정
+
+      // 3초 카운트다운 구현
+      const countdownInterval = setInterval(function () {
+        countdownElement.textContent = `${countdown}초 후 시작`; // 텍스트 업데이트
+        countdown--;
+        var bgm = document.getElementById("bgm");
+        bgm.play();
+
+        if (countdown < 0) {
+          clearInterval(countdownInterval); // 카운트다운 종료
+          countdownElement.textContent = "두더지를 잡아라!!!!!"; // 게임 시작 텍스트로 변경
+
+          // 3초 후 게임 시작
+          setInterval(function () {
+            changeImg();
+            changeText();
+          }, 1000);
+
+          clickCount = 1; // 시작할 때 클릭 횟수 초기화
+        }
+      }, 1000);
+    }
+
+    async function sendObj() {
+      const data = {
+        uiNum: '[[${session.user.uiNum}]]',
+        giNum: '[[${param.giNum}]]',
+        piPoint: point
+      }
+      console.log(data)
+      const json = JSON.stringify(data);
+      const res = await fetch('/team3/point-infos', {
+        method: "POST",
+        body: json,
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      });
+
+      const msg = await res.json();
+      alert(msg.msg);
+      location.reload();
+    }
+
+    window.addEventListener('load', async function () {
+      const res = await fetch('/team3/point-infos/max?giNum=6');//giNum을 일단 하드코딩 한건데 저걸 받아와서 게임마다 다르게 해야함
+      const point = await res.json();
+      document.querySelector('#maxScore').innerHTML = point.piPoint;
+
+      const rankRes = await fetch('/team3/point-infos/rank?giNum=6');
+      const users = await rankRes.json();
+      let html = '';
+      let i = 1;
+      for (const user of users) {
+        html += '<tr>';
+        html += `<td>${i}</td>`;
+        html += `<td>${user.uiName}</td>`;
+        html += `<td>${user.piPoint}</td>`;
+        html += '</tr>';
+        i++;
+      }
+      document.querySelector('#tBody').innerHTML = html;
+    })
+
+  </script>
+  <script th:src="@{/index/js/head.js}"></script>
+</body>
+
+</html>

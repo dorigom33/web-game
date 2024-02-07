@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="widtd=device-widtd, initial-scale=1.0">
+    <title>Document</title>
+    <!-- @{}은 컨텍스트 루트 -->
+    <link rel="stylesheet" th:href="@{/team5/css/table.css}" />
+</head>
+
+<body>
+    <button onclick="goUpdatePage()">수정</button>
+    <table border="1">
+        <tr>
+            <td>#</td>
+            <td>아이디</td>
+            <td>비밀번호</td>
+            <td>이름</td>
+            <td>전화번호</td>
+            <td>이메일</td>
+            <td>생년월일</td>
+            <td>생성날짜</td>
+            <td>수정날짜</td>
+        </tr>
+        <tbody id="userBody">
+
+            </tbody>
+
+        </table>
+        <div id="sign">
+            <button onclick="location.href=`/team5/tmpl/user-info/update?uiNum=${uiNum}`" class="btn2">유저 수정</button>
+            <button onclick="deleteUserInfo()" class="btn2">삭제</button>
+        </div>
+    </div>
+    <script>
+        const url = new URL(location.href);
+        const params = url.searchParams;
+        const uiNum = params.get('uiNum');
+
+        function goUpdatePage() {
+            location.href=`/team5/tmpl/user-info/update?uiNum=${uiNum}`;
+        }
+
+
+        async function deleteUserInfo() {
+            const res = await fetch(`/team5/user-infos/${uiNum}`, {
+                method: 'DELETE'
+            });
+            const result = await res.json();
+
+            if (result === 1) {
+                alert('삭제 완료');
+                location.href = '/team5/tmpl/user-info/list';
+            } else {
+                alert('삭제 실패');
+            }
+        }
+
+        window.addEventListener('load', async function () {
+            const res = await fetch(`/team5/user-infos/${uiNum}`);
+            const user = await res.json();
+
+            console.log(user);
+            let html = '';
+
+            html += '<tr>';
+            html += `<td>${user.uiNum}</td>`;
+            html += `<td>${user.uiId}</td>`;
+            html += `<td>${user.uiPwd}</td>`;
+            html += `<td>${user.uiName}</td>`;
+            html += `<td>${user.uiMobile}</td>`;
+            html += `<td>${user.uiEmail}</td>`;
+            html += `<td>${user.uiBirth}</td>`;
+            html += `<td>${user.credat}</td>`;
+            html += `<td>${user.lmodat}</td>`;
+            html += '</tr>';
+
+            document.querySelector('#userBody').innerHTML = html;
+        })
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+.btn-home {
+	background: #ffffffc0;
+	border: 1px solid #ddd;
+	padding: 4px 8px;
+	font-size: 20px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.btn-team {
+	background: #ffffffc0;
+	border: 1px solid #ddd;
+	padding: 4px 8px;
+	font-size: 20px;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-left: 10px;
+}
